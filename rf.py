@@ -7,17 +7,16 @@ import numpy as np
 df = pd.read_csv("dataset_5secondWindow.csv")
 
 df.drop(['user', 'time', 'id', 'activityrecognition#0'], axis=1, inplace=True)
-
 df.fillna(df.mean(numeric_only=True), inplace=True)
 
 categorical_cols = df.select_dtypes(include=['object']).columns
 if len(categorical_cols) > 0:
     le = LabelEncoder()
     for col in categorical_cols:
-        df[col] = le.fit_transform(df[col].astype(str)) 
+        df[col] = le.fit_transform(df[col].astype(str))
 
-X = df.drop(['target'], axis=1)  
-y = df['target']  
+X = df.drop(['target'], axis=1)
+y = df['target']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
@@ -27,8 +26,14 @@ rf.fit(X_train, y_train)
 importances = rf.feature_importances_
 indices = np.argsort(importances)[::-1]
 
-for i in range(X_train.shape[1]):
-    print(f"{X.columns[indices[i]]}: {importances[indices[i]]:.4f}")
+n_features = 45
+top_features = X.columns[indices[:n_features]]
+
+df_selected = df[top_features.to_list() + ['target']]
+
+df_selected.to_csv("dataset_5secondWindow_selected_features.csv", index=False)
+
+
 
 # from sklearn.ensemble import RandomForestClassifier
 # from sklearn.model_selection import train_test_split

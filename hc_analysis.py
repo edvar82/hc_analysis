@@ -19,7 +19,6 @@ def get_hc_plan_quota(quota_file_name):
     ht, cjt = zip(*data)
     return ht, cjt
 
-# Definir todas as cores
 colors = {
     'android.sensor.linear_acceleration#max': 'deepskyblue',
     'android.sensor.linear_acceleration#mean': 'steelblue',
@@ -140,7 +139,6 @@ def main():
 
     samples = columns
 
-    # Filtra séries curtas para evitar erro de janela maior que a série
     dx = 4
     HC = [ordpy.complexity_entropy(series, dx=dx) for series in time_series if len(series) >= dx]
 

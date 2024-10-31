@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("dataset_halfSecondWindow.csv")
+df = pd.read_csv("/content/hc_analysis/dataset_halfSecondWindow.csv")
 
 df.drop(['user', 'time', 'id'], axis=1, inplace=True)
 df.fillna(df.mean(numeric_only=True), inplace=True)
@@ -27,7 +27,7 @@ rf.fit(X_train, y_train)
 importances = rf.feature_importances_
 indices = np.argsort(importances)[::-1]
 
-num_features_list = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 66]
+num_features_list = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65]
 results = {}
 
 for num_features in num_features_list:
@@ -39,7 +39,9 @@ for num_features in num_features_list:
     X_train_selected = scaler.fit_transform(X_train_selected)
     X_test_selected = scaler.transform(X_test_selected)
     
-    mlp = MLPClassifier(random_state=42, max_iter=500)
+    print('Treinando com', num_features, 'features')
+    
+    mlp = MLPClassifier(random_state=42, max_iter=1000, learning_rate_init=0.001)
     mlp.fit(X_train_selected, y_train)
     
     y_pred = mlp.predict(X_test_selected)
